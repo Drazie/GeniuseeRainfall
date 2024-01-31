@@ -3,8 +3,8 @@ namespace RainfallREST.Model.ResponseModel
 {
 	public class RainfallReading
 	{
-        public DateTime DateMeasured { get; set; }
-        public decimal AmountMeasured { get; set; }
+        public DateTime DateTime { get; set; }
+        public decimal Value { get; set; }
     }
 }
 
