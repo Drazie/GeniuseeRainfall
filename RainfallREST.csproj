@@ -11,4 +11,14 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Model\" />
+    <None Remove="Model\ResponseModel\" />
+    <None Remove="Model\ErrorModel\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Model\" />
+    <Folder Include="Model\ResponseModel\" />
+    <Folder Include="Model\ErrorModel\" />
+  </ItemGroup>
 </Project>
