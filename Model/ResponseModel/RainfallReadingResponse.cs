@@ -1,9 +1,14 @@
-﻿using System;
-namespace RainfallREST.Model.ResponseModel
+﻿namespace RainfallREST.Model.ResponseModel
 {
-	public class RainfallReadingResponse
+    /// <summary>
+    /// Details of a rainfall reading response.
+    /// </summary>
+    public class RainfallReadingResponse
 	{
-		public List<RainfallReading> Readings { get; set; }
+        /// <summary>
+        /// A list of rainfall readings.
+        /// </summary>
+        public List<RainfallReading> Items { get; set; }
 	}
 }
 

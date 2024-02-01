@@ -1,10 +1,18 @@
-﻿using System;
-namespace RainfallREST.Model.ResponseModel
+﻿namespace RainfallREST.Model.ResponseModel
 {
-	public class RainfallReading
+    /// <summary>
+    /// Details of a rainfall reading.
+    /// </summary>
+    public class RainfallReading
 	{
-        public DateTime DateMeasured { get; set; }
-        public decimal AmountMeasured { get; set; }
+        /// <summary>
+        /// The date and time when the reading was measured.
+        /// </summary>
+        public DateTime DateTime { get; set; }
+        /// <summary>
+        /// The amount of rainfall measured.
+        /// </summary>
+        public decimal Value { get; set; }
     }
 }
 
