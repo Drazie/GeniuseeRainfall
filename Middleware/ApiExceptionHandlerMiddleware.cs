@@ -2,9 +2,11 @@
 using RainfallREST.Model.ErrorModel;
 using System.Net;
 using RainfallREST.Model.ExceptionModel;
+using Microsoft.AspNetCore.Mvc;
 
 namespace RainfallREST.Middleware
 {
+
     public class ApiExceptionHandlerMiddleware
     {
         private readonly RequestDelegate _next;

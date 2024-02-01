@@ -21,6 +21,9 @@ builder.Services.AddSwaggerGen(c =>
          Title = "Rainfall Api",
          Version = "v1",
          Description = "An API which provides rainfall reading data" });
+     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+     c.IncludeXmlComments(xmlPath);
  });
 
 var app = builder.Build();

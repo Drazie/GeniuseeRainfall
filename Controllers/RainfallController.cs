@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using RainfallREST.Model.ErrorModel;
 using RainfallREST.Model.ExceptionModel;
 using RainfallREST.Model.ResponseModel;
 
@@ -17,8 +18,21 @@ namespace RainfallREST.Controllers
         //get the list of stations
         //https://environment.data.gov.uk/flood-monitoring/id/stations?parameter=rainfall
 
+        /// <summary>
+        /// Retrieve the latest rainfall readings for the specified station ID.
+        /// </summary>
+        /// <param name="stationId">The ID of the reading station. This is a path parameter that identifies the station.</param>
+        /// <param name="count">The number of readings to return. This is an optional query parameter. If not specified, a default of 10 is used. The value must be between 1 and 100.</param>
+        /// <returns>A list of rainfall readings for the given station ID. If no readings are found, a 404 error is returned.</returns>
+        /// <response code="200">A list of rainfall readings successfully retrieved.</response>
+        /// <response code="400">The request is invalid due to an incorrect station ID or count parameter.</response>
+        /// <response code="404">No readings found for the specified stationId.</response>
         [HttpGet("id/{stationId}/readings")]
-        public async Task<IActionResult> GetRainfallReadingsFromSpecificStation(string stationId, int count = 10)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(RainfallReadingResponse))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(Error))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(Error))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(Error))]
+        public async Task<RainfallReadingResponse?> GetRainfallReadingsFromSpecificStation(string stationId, int count = 10)
         {
             if (count < 1 || count > 100)  //example of ErrorDetail
             {
@@ -43,10 +57,10 @@ namespace RainfallREST.Controllers
 
             if (readings?.Items == null || !readings.Items.Any())
             {
-                return NotFound(new { Message = $"No readings found for the specified stationId: {stationId}" });
+                throw new KeyNotFoundException($"No readings found for the specified stationId: {stationId}");
             }
 
-            return Ok(readings);
+            return readings;
         }
     }
 }
