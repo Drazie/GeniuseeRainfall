@@ -16,10 +16,14 @@
     <None Remove="Model\" />
     <None Remove="Model\ResponseModel\" />
     <None Remove="Model\ErrorModel\" />
+    <None Remove="Middleware\" />
+    <None Remove="Model\ExceptionModel\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\" />
     <Folder Include="Model\ResponseModel\" />
     <Folder Include="Model\ErrorModel\" />
+    <Folder Include="Middleware\" />
+    <Folder Include="Model\ExceptionModel\" />
   </ItemGroup>
 </Project>

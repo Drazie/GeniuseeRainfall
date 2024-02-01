@@ -1,27 +1,37 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using System.Reflection;
+using Microsoft.OpenApi.Models;
+using RainfallREST.Middleware;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddHttpClient();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+builder.Services.AddRouting(options =>
+{
+    options.LowercaseUrls = true;
+});
+
 builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
 
 builder.Services.AddSwaggerGen(c =>
  {
-     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Rainfall Api", Version = "v1" });
+     c.SwaggerDoc("v1", new OpenApiInfo {
+         Title = "Rainfall Api",
+         Version = "v1",
+         Description = "An API which provides rainfall reading data" });
  });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ApiExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 

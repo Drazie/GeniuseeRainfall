@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using RainfallREST.Model.ExceptionModel;
 using RainfallREST.Model.ResponseModel;
-
-// For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace RainfallREST.Controllers
 {
@@ -19,27 +14,40 @@ namespace RainfallREST.Controllers
         {
             _clientFactory = clientFactory;
         }
-        //to get the list of stations
+        //get the list of stations
         //https://environment.data.gov.uk/flood-monitoring/id/stations?parameter=rainfall
-
-
 
         [HttpGet("id/{stationId}/readings")]
         public async Task<IActionResult> GetRainfallReadingsFromSpecificStation(string stationId, int count = 10)
         {
-            //http://environment.data.gov.uk/flood-monitoring
-            var root = "http://environment.data.gov.uk/flood-monitoring/id/stations";
-            var requestLink = $"{root}/{stationId}/readings?_limit={count}";
+            if (count < 1 || count > 100)  //example of ErrorDetail
+            {
+                throw new ParameterException("Invalid request", nameof(count), "Out of range");
+            }
+            var rootUrl = "http://environment.data.gov.uk/flood-monitoring/id/stations";
+            var requestLink = $"{rootUrl}/{stationId}/readings?_limit={count}";
             var client = _clientFactory.CreateClient();
             var response = await client.GetAsync(requestLink);
 
+            if (!response.IsSuccessStatusCode)
+            {
+                var message = response.StatusCode == System.Net.HttpStatusCode.NotFound
+                    ? $"No readings found for the specified stationId: {stationId}"
+                    : $"Error retrieving readings: {response.ReasonPhrase}";
+
+                throw new HttpRequestException(message);
+            }
+
             var content = await response.Content.ReadAsStringAsync();
-            // Deserialize and map the response to your model
             var readings = JsonConvert.DeserializeObject<RainfallReadingResponse>(content);
+
+            if (readings?.Items == null || !readings.Items.Any())
+            {
+                return NotFound(new { Message = $"No readings found for the specified stationId: {stationId}" });
+            }
 
             return Ok(readings);
         }
-        
     }
 }
 

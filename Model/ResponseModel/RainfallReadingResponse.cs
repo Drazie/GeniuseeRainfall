@@ -1,5 +1,4 @@
-﻿using System;
-namespace RainfallREST.Model.ResponseModel
+﻿namespace RainfallREST.Model.ResponseModel
 {
 	public class RainfallReadingResponse
 	{
